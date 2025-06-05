@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, Github, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +14,7 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,7 +42,9 @@ const Contact = () => {
           subject: '',
           message: ''
         });
-        event.currentTarget.reset();
+        if (formRef.current) {
+          formRef.current.reset();
+        }
       } else {
         console.log("Error", data);
         toast({
@@ -139,7 +141,7 @@ const Contact = () => {
 
           {/* Contact Form */}
           <div className="animate-slide-in-right">
-            <form onSubmit={onSubmit} className="bg-slate-800/50 rounded-xl p-8 backdrop-blur-sm border border-slate-700">
+            <form ref={formRef} onSubmit={onSubmit} className="bg-slate-800/50 rounded-xl p-8 backdrop-blur-sm border border-slate-700">
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
